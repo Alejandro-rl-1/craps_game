@@ -1,9 +1,14 @@
 package com.example.crapsgame262.models;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /** Holds the state and rules for a player's Craps session. */
 public class Game {
     private final Dice firstDie = new Dice();
     private final Dice secondDie = new Dice();
+    private final List<Integer> rollHistory = new ArrayList<>();
     private boolean pointEstablished;
     private int point;
     private int lastRoll;
@@ -19,7 +24,9 @@ public class Game {
         firstDieValue = firstDie.roll();
         secondDieValue = secondDie.roll();
         lastRoll = firstDieValue + secondDieValue;
+        rollHistory.add(lastRoll);
         rollsInRound++;
+
         if (!pointEstablished) {
             resolveComeOutRoll();
         } else if (lastRoll == point) {
@@ -63,4 +70,9 @@ public class Game {
     public int getGamesLost() { return gamesLost; }
     public String getMessage() { return message; }
     public boolean isPointEstablished() { return pointEstablished; }
+
+    /** Returns a read-only view of all dice totals rolled during this session. */
+    public List<Integer> getRollHistory() {
+        return Collections.unmodifiableList(rollHistory);
+    }
 }
